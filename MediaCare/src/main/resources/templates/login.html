@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>	</title>
-		<
-	</head>
-	<body>
-		
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+
+</head>
+<body>
+	<p>Login Page</p>
 	
-	</body>
+	<div th:if="${param.error}">
+		<p>[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+	</div>
+	<form th:action="@{/user/processLogin}" method="POST" >
+		<input placeholder="Enter your email" name="email" type="text"/><br /> 
+		<input placeholder="Enter your password" name="password" type="text"/><br/>
+		<button type="submit">Login</button>
+	</form>
+
+</body>
 </html>
