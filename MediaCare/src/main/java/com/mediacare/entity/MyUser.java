@@ -10,17 +10,22 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 
 import com.mediacare.enums.Authority;
 import com.mediacare.enums.Gender;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.JOINED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MyUser {
 
 	@Id
@@ -35,7 +40,6 @@ public class MyUser {
 	private String lastName;
 
 	@Column(name = "email")
-	@Email
 	private String email;
 
 	@Column(name = "password")
@@ -51,4 +55,7 @@ public class MyUser {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
 	private Gender gender;
+	
+	@Column(name = "phone_number",length = 11)
+	private Integer phoneNumber;
 }

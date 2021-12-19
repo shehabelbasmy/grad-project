@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>
+</title>
+<style type="text/css">
+	.error{
+		color: red;
+	}
+</style>
+</head>
+<body>
+	<p>Register New User</p>
+
+	<form th:action="@{/user/processRegister}" method="POST" th:object="${newUser}">
+		<input placeholder="Enter your FirstName" name="firstName" type="text" th:field="*{firstName}"/><br />
+		<div th:if="${#fields.hasAnyErrors()}">
+			<ul>
+				<li th:each="error : ${#fields.errors('firstName')}" th:text="${error}" class="error"/>
+			</ul>
+		</div>
+		 
+		<input placeholder="Enter your LastName" name="lastName" type="text" th:field="*{lastName}"/><br/>
+		<div th:if="${#fields.hasAnyErrors()}">
+			<ul>
+				<li th:each="error : ${#fields.errors('lastName')}" th:text="${error}" class="error"/>
+			</ul>
+		</div>
+		
+		<input placeholder="Enter your Email" name="email" type="text" th:field="*{email}"/><br/>
+		<div th:if="${#fields.hasAnyErrors()}">
+			<ul>
+				<li th:each="error : ${#fields.errors('email')}" th:text="${error}" class="error"/>
+			</ul>
+		</div>
+		
+		
+		<input placeholder="Enter your password" name="password" type="password" th:field="*{password}"/><br/>
+		<div th:if="${#fields.hasAnyErrors()}">
+			<ul>
+				<li th:each="error : ${#fields.errors('password')}" class="error" th:text="${error}"/>
+			</ul>
+		</div>
+		
+		<button type="submit">Submit</button>
+	</form>
+
+</body>
+</html>
