@@ -1,12 +1,12 @@
-package com.mediacare.rest.controller;
+package com.mediacare.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mediacare.rest.dto.AuthetcationResponse;
-import com.mediacare.rest.dto.LoginRequest;
+import com.mediacare.dto.AuthetcationResponse;
+import com.mediacare.dto.LoginRequest;
 import com.mediacare.service.AuthService;
 
 import lombok.AllArgsConstructor;

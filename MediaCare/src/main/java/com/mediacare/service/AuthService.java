@@ -12,11 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mediacare.dao.UserRepository;
+import com.mediacare.dto.AuthetcationResponse;
+import com.mediacare.dto.LoginRequest;
 import com.mediacare.dto.NewUserForm;
 import com.mediacare.entity.MyUser;
 import com.mediacare.enums.Authority;
-import com.mediacare.rest.dto.AuthetcationResponse;
-import com.mediacare.rest.dto.LoginRequest;
 import com.mediacare.utils.JwtProvider;
 
 import lombok.AllArgsConstructor;

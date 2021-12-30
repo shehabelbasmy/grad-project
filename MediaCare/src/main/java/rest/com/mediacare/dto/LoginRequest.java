@@ -1,4 +1,4 @@
-package com.mediacare.rest.dto;
+package com.mediacare.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
