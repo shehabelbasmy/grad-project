@@ -40,7 +40,7 @@ public class JwtProvider {
 			keyStore=KeyStore.getInstance("JKS");
 			InputStream inputStream = getClass().getResourceAsStream("/mediacare.jks");
 			keyStore.load(inputStream, "mediacare".toCharArray());
-			System.out.println(keyStore==null);
+			
 		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
 			throw new MediaCareException("Exception occurred while loading keystore",e);
 		}

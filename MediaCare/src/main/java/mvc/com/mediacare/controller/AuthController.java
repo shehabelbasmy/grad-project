@@ -16,7 +16,7 @@ import com.mediacare.service.AuthService;
 import lombok.AllArgsConstructor;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/admin")
 @AllArgsConstructor
 public class AuthController {
 
