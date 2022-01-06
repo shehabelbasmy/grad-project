@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return buildSpringUser(user);
 	}
 
-	private User buildSpringUser(MyUser user) {
+	private UserDetails buildSpringUser(MyUser user) {
 		
 		SimpleGrantedAuthority simpleGrantedAuthority = 
 				new SimpleGrantedAuthority(user.getAuthority().toString());
@@ -43,16 +43,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Collection< ? extends GrantedAuthority> roles= 
 				Collections.singletonList(simpleGrantedAuthority);
 		
-		User springUser = new User(
-				user.getEmail(), 
-				user.getPassword(), 
-				user.isEnabled(), 
-				true, 
-				true, 
-				true, 
-				roles);
+		return  User.builder()
+					.password(user.getPassword())
+					.username(user.getEmail())
+					.accountExpired(false)
+					.accountLocked(false)
+					.authorities(roles)
+					.disabled(false)
+					.credentialsExpired(false)
+					.build();
 		
-		return springUser;
 	}
 	
 }

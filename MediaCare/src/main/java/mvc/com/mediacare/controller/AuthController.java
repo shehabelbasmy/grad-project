@@ -2,6 +2,8 @@ package com.mediacare.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,26 +24,49 @@ public class AuthController {
 
 	private final AuthService authService; 
 	
-	@GetMapping("/register")
+	@GetMapping("/signup")
 	public String signUp(Model theModel) {
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			return "redirect:/admin/profile";
+		}
 		
 		NewUserForm theNewUser=new NewUserForm(); 
 		
 		theModel.addAttribute("newUser", theNewUser);
 		
-		return "register";
+		return "signup";
 	}
 
 	@PostMapping("/processRegister")
-	public String processSignUp(@ModelAttribute("newUser") @Valid NewUserForm theNewUser,
+	public String processSignUp(
+			@ModelAttribute("newUser") 
+			@Valid NewUserForm theNewUser,
 			BindingResult bindingResult) {
 		
 		if(bindingResult.hasErrors()) {
-			return "register";
+			return "signup";
 		}
 		
 		authService.register(theNewUser);
 		
 		return "redirect:/";
+	}
+	@GetMapping("/login")
+	public String login(){
+		
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (!	(authentication instanceof AnonymousAuthenticationToken)) {
+			return "redirect:/admin/profile";
+		}
+		return"login";
+	}
+	
+	@GetMapping("/home")
+	public String home(){
+		
+		return "home";
 	}
 }

@@ -48,13 +48,13 @@ public class JwtProvider {
 	}
 	
 	public String generateToken(Authentication authentication) {
-		User springUser = (User) authentication.getPrincipal();
+		var springUser = (User) authentication.getPrincipal();
 		
 		return Jwts.builder()
 				   .setSubject(springUser.getUsername())
 				   .setIssuedAt(Date.from(Instant.now()))
 				   .signWith(getPrivateKey())
-				   .setExpiration(Date.from(Instant.now().minusMillis(jwtExpirationMills)))
+				   .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationMills)))
 				   .compact();
 		
 	}
@@ -78,8 +78,11 @@ public class JwtProvider {
 	}
 	
 	public boolean validateToken(String jwt) {
-		
-		Jwts.parserBuilder().setSigningKey(getPublicKey()).build().parseClaimsJwt(jwt);
+
+		Jwts.parserBuilder()
+			.setSigningKey(getPublicKey())
+			.build()
+			.parseClaimsJws(jwt);
 		
 		return true;
 	}
