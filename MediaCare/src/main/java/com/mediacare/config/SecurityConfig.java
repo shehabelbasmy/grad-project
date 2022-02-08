@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.AllArgsConstructor;
 
-@EnableWebSecurity()
+@EnableWebSecurity
 public class SecurityConfig{
 
 	@Configuration
@@ -40,8 +40,6 @@ public class SecurityConfig{
 			auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 		}
 		
-		
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			
@@ -49,15 +47,14 @@ public class SecurityConfig{
 			
 			http.authorizeRequests()
 				.antMatchers("/api/login").permitAll()
+				.antMatchers("/api/signup").permitAll()
 				.anyRequest().authenticated();
 			
 			http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 			
 			
 		}
-
 
 		@Override
 		@Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -95,10 +92,7 @@ public class SecurityConfig{
 					.clearAuthentication(true)
 				.and()
 				.sessionManagement()
-				.maximumSessions(1)
-				;
-				
-				
+				.maximumSessions(1);
 		}
 		
 		
