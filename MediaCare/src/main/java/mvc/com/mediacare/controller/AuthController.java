@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mediacare.dto.NewUserForm;
-import com.mediacare.service.AuthService;
+import com.mediacare.service.RestAuthService;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AuthController {
 
-	private final AuthService authService; 
+	private final RestAuthService authService; 
 	
 	@GetMapping("/signup")
 	public String signUp(Model theModel) {

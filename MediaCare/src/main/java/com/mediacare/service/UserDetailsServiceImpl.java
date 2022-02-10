@@ -1,11 +1,6 @@
 package com.mediacare.service;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mediacare.dao.UserRepository;
 import com.mediacare.entity.MyUser;
+import com.mediacare.util.SpringUser;
 
 import lombok.AllArgsConstructor;
 
@@ -31,28 +27,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		MyUser user=userOptional
 				.orElseThrow(()->new UsernameNotFoundException("No User Found with Email : "+email));
+		user.setLogggedOut(false);
 		
-		return buildSpringUser(user);
+		userRepo.saveAndFlush(user);
+		
+		return new SpringUser(user);
 	}
 
-	private UserDetails buildSpringUser(MyUser user) {
+	@Transactional(readOnly = true)
+	public SpringUser getUserByEmail(String email) {
 		
-		SimpleGrantedAuthority simpleGrantedAuthority = 
-				new SimpleGrantedAuthority(user.getAuthority().toString());
+		Optional<MyUser> userOptional = userRepo.findByEmail(email);
 		
-		Collection< ? extends GrantedAuthority> roles= 
-				Collections.singletonList(simpleGrantedAuthority);
+		MyUser user=userOptional
+				.orElseThrow(()->new UsernameNotFoundException("No User Found with Email : "+email));
 		
-		return  User.builder()
-					.password(user.getPassword())
-					.username(user.getEmail())
-					.accountExpired(false)
-					.accountLocked(false)
-					.authorities(roles)
-					.disabled(false)
-					.credentialsExpired(false)
-					.build();
-		
+		return new SpringUser(user);
 	}
-	
+
 }

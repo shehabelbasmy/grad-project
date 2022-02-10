@@ -28,7 +28,7 @@ public class RefreshTokenService {
 	
 	public void validateRefresToken(String refreshToken) {
 		refreshTokenRepo.findByToken(refreshToken)
-			.orElseThrow(() -> new MediaCareException("InvaildRefreshToken"));
+			.orElseThrow(() -> new MediaCareException("Invaild Refresh Token"));
 	}
 	
 	public void deleteFreshtoken(String token) {
