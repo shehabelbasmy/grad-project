@@ -1,7 +1,5 @@
 package com.mediacare.dto;
 
-import java.time.Instant;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +14,6 @@ public class AuthetcationResponse {
 	private String authenticationToken;
 	
 	private String refreshToken;
-	
-	private Instant expiredAt;
 	
 	private String email;
 	

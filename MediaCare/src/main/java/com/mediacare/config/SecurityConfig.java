@@ -46,11 +46,12 @@ public class SecurityConfig{
 			http.requestMatcher(new AntPathRequestMatcher("/api/**")).csrf().disable();
 			
 			http.authorizeRequests()
-				.antMatchers("/api/logout","/api/login","/api/signup").permitAll()
+				.antMatchers("/api/logout","/api/refreshToken","/api/login","/api/signup").permitAll()
 				.anyRequest().authenticated();
 			
 			http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 			
 			
 		}

@@ -2,7 +2,6 @@ package com.mediacare.utils;
 
 import java.io.InputStream;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.Instant;
@@ -11,43 +10,46 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.mediacare.entity.MyUser;
 import com.mediacare.enums.Authority;
 import com.mediacare.exception.MediaCareException;
-import com.mediacare.service.UserDetailsServiceImpl;
 import com.mediacare.util.SpringUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureException;
 
 @Service
 public class JwtProvider {
 
 	private KeyStore keyStore;
-
 	@Value("${jwt.expiration.time}")
 	private Long jwtExpirationMills;
-
 	@Autowired
-	private UserDetailsServiceImpl userService;
+	private Queue<String> jwtQueue;
+	private ScheduledExecutorService executor;
+	@Autowired
+	private Runnable clearJwtTask;
 	
 	@PostConstruct
 	public void init() {
-
+		
+		//executor=new ScheduledThreadPoolExecutor(1);
+		executor = Executors.newSingleThreadScheduledExecutor();
 		try {
 			keyStore = KeyStore.getInstance("JKS");
 			InputStream inputStream = getClass().getResourceAsStream("/mediacare.jks");
@@ -59,16 +61,15 @@ public class JwtProvider {
 
 	}
 
-	public String generateToken(Authentication authentication) {
+	public String generateToken(SpringUser springUser) {
 		
 		return Jwts.builder()
-					.setClaims(createClaims((SpringUser)authentication.getPrincipal()))
+					.setClaims(createClaims(springUser))
 					.signWith(getPrivateKey())
 					.setIssuedAt(Date.from(Instant.now()))
 					.setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationMills)))
 					.compact();
 	}
-	
 	
 	private Map<String, String> createClaims(SpringUser springUser){
 		
@@ -90,8 +91,11 @@ public class JwtProvider {
 		try {
 			return parseJwtToke(jwt, "email");
 			
-		} catch (ExpiredJwtException e) {
-			return e.getClaims().get("email", String.class);
+		} catch (ExpiredJwtException ex) {
+			return ex.getClaims().get("email", String.class);
+		}
+		catch (Exception e) {
+			return null;
 		}
 	}
 
@@ -110,44 +114,23 @@ public class JwtProvider {
 
 	}
 
-	public boolean validateToken(String jwt,
-			HttpServletResponse response)
-			throws SignatureException,ExpiredJwtException{
+	public boolean validateToken(String jwt){
 
 		try {
 			parseJwtToke(jwt,null);
 			
-		} catch (ExpiredJwtException ex) {
+			if(jwtQueue.contains(jwt)) {
+				
+				return false;
+			}
+		}catch (Exception e) { 
 			
-			return handleExpiredJwt(jwt, response);
-			
-		}catch (Exception e) {
-			
+			if (e instanceof ExpiredJwtException) {
+				return true;
+			}
 			return false;
 		}
-
 		return true;
-
-	}
-
-	private boolean handleExpiredJwt(String jwt, HttpServletResponse response) {
-		SpringUser springUser = 
-				(SpringUser) userService.getUserByEmail(getEmailFromJwt(jwt));
-		
-		UsernamePasswordAuthenticationToken authToken=
-			new UsernamePasswordAuthenticationToken(
-					springUser, 
-					null, 
-					springUser.getAuthorities());
-		
-		if(!springUser.isLoggedOut()) {
-			
-			response.setHeader("Authorization", "Bearer " +generateToken(authToken));
-
-			return true;
-		}
-		
-		return false;
 	}
 
 	private String  parseJwtToke(String jwt,String property) {
@@ -166,26 +149,21 @@ public class JwtProvider {
 	private PublicKey getPublicKey() {
 		try {
 			return keyStore.getCertificate("mediacare").getPublicKey();
-		} catch (KeyStoreException e) {
+		} catch (Exception e) {
 			throw new MediaCareException("Exception occured while retrieving public key from keystore", e);
-
+			
 		}
-	}
-
-	public Long getJwtExpirationMills() {
-		return jwtExpirationMills;
 	}
 
 	public Collection<? extends GrantedAuthority> getRoleFromJwt(String jwt) {
 		
-		String roleUUID ;
+		String roleUUID="";
+		
 		try {
-			roleUUID= parseJwtToke(jwt, "role");
+			roleUUID = parseJwtToke(jwt, "role");
+		} catch (ExpiredJwtException ex) {
 			
-		} catch (ExpiredJwtException e) {
-			
-			roleUUID=e.getClaims().get("role", String.class);
-			
+			roleUUID = ex.getClaims().get("role", String.class);
 		}
 		Authority authority = Authority.of(roleUUID);
 		
@@ -194,4 +172,45 @@ public class JwtProvider {
 		return Collections.singletonList(simpleAuthority);
 	}
 
+	public boolean isTokenExpired(String jwtToken) {
+		try {
+			parseJwtToke(jwtToken, null);
+			return false;
+			
+		} catch (ExpiredJwtException e) {
+
+			if (e instanceof ExpiredJwtException) {
+				return true;	
+			}
+			return false;
+		}
+		
+	}
+
+	public String newtokenFromSameJwt(String jwtToken) {
+		MyUser myuser=
+				MyUser.builder()
+				.email(getEmailFromJwt(jwtToken))
+				.authority(Authority.valueOf(getRoleFromJwt(jwtToken).iterator().next().getAuthority()))
+				.build();
+
+		return generateToken(new SpringUser(myuser));
+	}
+	
+	public void invalidateToken(String jwt) {
+		
+
+		if (jwtQueue.isEmpty()) {
+			executor.scheduleAtFixedRate(
+				clearJwtTask,
+				jwtExpirationMills,
+				jwtExpirationMills, 
+				TimeUnit.MILLISECONDS);
+		}
+		
+		jwtQueue.add(jwt);
+
+		System.out.println("Logout"+Instant.now());
+				
+	}
 }

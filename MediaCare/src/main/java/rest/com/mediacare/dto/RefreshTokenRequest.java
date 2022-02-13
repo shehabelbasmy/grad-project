@@ -14,5 +14,7 @@ public class RefreshTokenRequest {
 	@NotBlank
 	private String refreshToken;
 	
-	private String email;
+	@NotBlank
+	private String jwtToken;
+	
 }

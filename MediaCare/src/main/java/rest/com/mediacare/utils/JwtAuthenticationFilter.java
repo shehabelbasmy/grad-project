@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String jwt = getJwtFromRequest(request);
 
-		if (StringUtils.hasText(jwt)&&jwtProvider.validateToken(jwt,response)) {
+		if (validateToken(jwt)) {
 			
 			String email = jwtProvider.getEmailFromJwt(jwt);
 			
@@ -50,6 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		filterChain.doFilter(request, response);
 
+	}
+
+	private boolean validateToken(String jwt) {
+		return  StringUtils.hasText(jwt)&&
+				!jwtProvider.isTokenExpired(jwt)&&
+				jwtProvider.validateToken(jwt);
 	}
 
 	private String getJwtFromRequest(HttpServletRequest request) {

@@ -1,8 +1,10 @@
 package com.mediacare.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mediacare.dto.AuthetcationResponse;
 import com.mediacare.dto.LoginRequest;
+import com.mediacare.dto.RefreshTokenRequest;
 import com.mediacare.service.RestAuthService;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +21,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class AuthRestController {
+public class RestAuthController {
 
 	private final RestAuthService authService;
 	
@@ -34,8 +37,25 @@ public class AuthRestController {
 	}
 	
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpServletRequest request){
+	public ResponseEntity<?> logout(
+			@RequestBody @Valid RefreshTokenRequest reqest,
+			BindingResult bindResult){
 		
-		return authService.logout(request);
+		if (bindResult.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		
+		return authService.logout(reqest);
+	}
+	
+	@PostMapping("/refreshToken")
+	public ResponseEntity<AuthetcationResponse> refreshToken(
+			@RequestBody @Valid RefreshTokenRequest reTokenRequest,
+			BindingResult bindResult) {
+		if (bindResult.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		return authService.createNewFreshtoken(reTokenRequest);
+		
 	}
 }

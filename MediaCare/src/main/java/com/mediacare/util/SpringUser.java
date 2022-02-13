@@ -9,10 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mediacare.entity.MyUser;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class SpringUser implements UserDetails {
 
 	private MyUser user;
-	
+
 	public SpringUser(MyUser user) {
 		this.user=user;
 	}
@@ -59,10 +62,6 @@ public class SpringUser implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return user.isEnabled();
-	}
-	
-	public boolean isLoggedOut() {
-		return this.user.isLogggedOut();
 	}
 
 }
