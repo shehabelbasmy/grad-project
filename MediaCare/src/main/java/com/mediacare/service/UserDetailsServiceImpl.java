@@ -1,6 +1,7 @@
 package com.mediacare.service;
 import java.util.Optional;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,22 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<MyUser> userOptional = userRepo.findByEmail(email);
 		
 		MyUser user=userOptional
-				.orElseThrow(()->new UsernameNotFoundException("No User Found with Email : "+email));
-		user.setLogggedOut(false);
-		
-		userRepo.saveAndFlush(user);
-		
-		return new SpringUser(user);
-	}
-
-	@Transactional(readOnly = true)
-	public SpringUser getUserByEmail(String email) {
-		
-		Optional<MyUser> userOptional = userRepo.findByEmail(email);
-		
-		MyUser user=userOptional
-				.orElseThrow(()->new UsernameNotFoundException("No User Found with Email : "+email));
-		
+				.orElseThrow(()-> new BadCredentialsException("Incorrect User Name Or Password"));
+//		MyUser user=userOptional
+//				.orElseThrow(()->{
+//					var ex =new MediaCareException("Incorrect User Name Or Password");
+//					ex.setStatus(HttpStatus.UNAUTHORIZED);
+//					return ex;
+//				});
 		return new SpringUser(user);
 	}
 

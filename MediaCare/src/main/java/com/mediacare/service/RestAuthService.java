@@ -14,14 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mediacare.dao.UserRepository;
-import com.mediacare.dto.AuthetcationResponse;
-import com.mediacare.dto.LoginRequest;
-import com.mediacare.dto.NewUserForm;
-import com.mediacare.dto.RefreshTokenRequest;
+import com.mediacare.rest.dto.AuthenticationResponse;
+import com.mediacare.rest.dto.LoginRequest;
+import com.mediacare.mvc.dto.NewUserForm;
+import com.mediacare.rest.dto.RefreshTokenRequest;
 import com.mediacare.entity.MyUser;
 import com.mediacare.enums.Authority;
 import com.mediacare.util.SpringUser;
-import com.mediacare.utils.JwtProvider;
+import com.mediacare.rest.utils.JwtProvider;
 
 import lombok.AllArgsConstructor;
 
@@ -49,7 +49,7 @@ public class RestAuthService {
 	}
 
 	@Transactional
-	public AuthetcationResponse login(LoginRequest loginRequest) {
+	public ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) {
 
 		UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
 				loginRequest.getPassword());
@@ -63,14 +63,15 @@ public class RestAuthService {
 		String jwtToken = jwtProvider.generateToken((SpringUser) authentication.getPrincipal());
 		
 		System.out.println("Jwt Generated"+Instant.now());
-		
-		return AuthetcationResponse.builder().email(loginRequest.getEmail()).refreshToken(refrshtoken)
+
+		AuthenticationResponse response = AuthenticationResponse.builder().email(loginRequest.getEmail()).refreshToken(refrshtoken)
 				.authenticationToken(jwtToken).build();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	public ResponseEntity<AuthetcationResponse> createNewFreshtoken(RefreshTokenRequest refreshRequest) {
+	public ResponseEntity<AuthenticationResponse> createNewFreshtoken(RefreshTokenRequest refreshRequest) {
 
-		AuthetcationResponse newResponse;
+		AuthenticationResponse newResponse;
 
 		if (jwtProvider.validateToken(refreshRequest.getJwtToken())) {
 
@@ -96,8 +97,8 @@ public class RestAuthService {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
-	private AuthetcationResponse buildAuthenticationResponse(String refreshTest, String jwtTest) {
-		return AuthetcationResponse.builder().authenticationToken(jwtTest).refreshToken(refreshTest).build();
+	private AuthenticationResponse buildAuthenticationResponse(String refreshTest, String jwtTest) {
+		return AuthenticationResponse.builder().authenticationToken(jwtTest).refreshToken(refreshTest).build();
 	}
 
 	public ResponseEntity<?> logout(RefreshTokenRequest refreshRequest) {

@@ -58,7 +58,5 @@ public class MyUser {
 	
 	@Column(name = "phone_number",length = 11)
 	private Integer phoneNumber;
-	
-	@Column(name = "logged_out")
-	private boolean isLogggedOut;
+
 }

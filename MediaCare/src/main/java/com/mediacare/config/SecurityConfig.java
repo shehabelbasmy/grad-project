@@ -1,7 +1,8 @@
 package com.mediacare.config;
 
-import javax.servlet.Filter;
-
+import com.mediacare.rest.exception.RestAccesDeniedHandler;
+import com.mediacare.rest.exception.RestAuthHandler;
+import com.mediacare.rest.utils.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -9,12 +10,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -22,6 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import lombok.AllArgsConstructor;
 
 @EnableWebSecurity
+@EnableMethodSecurity(jsr250Enabled = true,prePostEnabled = true,securedEnabled = true)
 public class SecurityConfig{
 
 	@Configuration
@@ -30,11 +32,10 @@ public class SecurityConfig{
 	public static class SecurityConfigForRest extends WebSecurityConfigurerAdapter{
 		
 		private final UserDetailsService userDetailsService;
-		
-		private final Filter jwtAuthenticationFilter;
-		
+		private final JwtFilter jwtFilter;
 		private final PasswordEncoder passwordEncoder;
-
+		private final RestAuthHandler restAuthFailure;
+		private final RestAccesDeniedHandler restAccessHandler;
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -43,17 +44,19 @@ public class SecurityConfig{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			
-			http.requestMatcher(new AntPathRequestMatcher("/api/**")).csrf().disable();
-			
-			http.authorizeRequests()
+			http.requestMatcher(new AntPathRequestMatcher("/api/**"));
+			http.csrf().disable()
+				.authorizeRequests()
 				.antMatchers("/api/logout","/api/refreshToken","/api/login","/api/signup").permitAll()
-				.anyRequest().authenticated();
-			
-			http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-			
-			
+				.anyRequest().authenticated()
+				.and()
+					.exceptionHandling()
+					.authenticationEntryPoint(restAuthFailure)
+					.accessDeniedHandler(restAccessHandler)
+				.and()
+					.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+					.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
 
 		@Override
@@ -67,11 +70,10 @@ public class SecurityConfig{
 	@Order(2)
 	@AllArgsConstructor
 	public static class SecurityConfigForMvc extends WebSecurityConfigurerAdapter{
-		
-		
+
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-		
+
 			http.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/admin/login","/admin/signup").permitAll()
@@ -83,7 +85,10 @@ public class SecurityConfig{
 					.usernameParameter("email")
 					.passwordParameter("password")
 					.loginProcessingUrl("/admin/processLogin")
-					.defaultSuccessUrl("/")	
+					.defaultSuccessUrl("/")
+				.and()
+					.exceptionHandling()
+					.accessDeniedPage("/error/accessdenied")
 				.and()
 					.logout()
 					.logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", HttpMethod.GET.toString()))
@@ -93,15 +98,9 @@ public class SecurityConfig{
 				.and()
 				.sessionManagement()
 				.maximumSessions(1);
-		}
-		
-		
-	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		// TODO Auto-generated method stub
-		return new BCryptPasswordEncoder();
+		}
+
 	}
 
 }

@@ -2,8 +2,7 @@ package com.mediacare.entity;
 
 import java.sql.Time;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,4 +21,5 @@ public class Patient extends MyUser {
 	@Column(name="update_state")
 	@DateTimeFormat(pattern = "yyyy-mm-dd : hh:mm")
 	private Time updateState;
+
 }
