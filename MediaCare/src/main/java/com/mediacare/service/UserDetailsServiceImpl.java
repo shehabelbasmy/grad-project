@@ -27,13 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<MyUser> userOptional = userRepo.findByEmail(email);
 		
 		MyUser user=userOptional
-				.orElseThrow(()-> new BadCredentialsException("Incorrect User Name Or Password"));
-//		MyUser user=userOptional
-//				.orElseThrow(()->{
-//					var ex =new MediaCareException("Incorrect User Name Or Password");
-//					ex.setStatus(HttpStatus.UNAUTHORIZED);
-//					return ex;
-//				});
+				.orElseThrow(()-> new UsernameNotFoundException("Username Not Found"));
 		return new SpringUser(user);
 	}
 

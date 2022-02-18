@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,8 +39,8 @@ public class SecurityConfig{
 		private final RestAuthHandler restAuthFailure;
 		private final RestAccesDeniedHandler restAccessHandler;
 		@Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		protected void configure(AuthenticationManagerBuilder auth){
+			auth.authenticationProvider(dao());
 		}
 		
 		@Override
@@ -57,6 +59,13 @@ public class SecurityConfig{
 					.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 					.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		}
+		@Bean
+		public AuthenticationProvider dao(){
+			DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
+			dao.setPasswordEncoder(passwordEncoder);
+			dao.setUserDetailsService(userDetailsService);
+			return dao;
 		}
 
 		@Override
