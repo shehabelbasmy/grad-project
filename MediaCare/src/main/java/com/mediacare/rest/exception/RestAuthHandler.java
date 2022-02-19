@@ -1,7 +1,6 @@
 package com.mediacare.rest.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -15,14 +14,12 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class RestAuthHandler implements AuthenticationEntryPoint {
 
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException, ServletException {
-        String message="Incorrect Username Or Password";
-        if (ex instanceof InsufficientAuthenticationException) {
-            message="Access Denied, Please Login First!";
-        }
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
+        byte[] message = ex.getMessage().getBytes(StandardCharsets.UTF_8);
+        response.getOutputStream().write(message);
     }
 
 }

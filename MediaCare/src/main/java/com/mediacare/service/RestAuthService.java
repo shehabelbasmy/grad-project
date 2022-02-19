@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import javax.transaction.Transactional;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +36,7 @@ public class RestAuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
+	private final MessageSource messagesource;
 
 	@Transactional
 	public void register(NewUserForm newUser) {
@@ -58,18 +61,18 @@ public class RestAuthService {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		String refrshtoken = refreshTokenService.generateRefreshToken().getToken();
+		String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
 		String jwtToken = jwtProvider.generateToken((SpringUser) authentication.getPrincipal());
 		
 		System.out.println("Jwt Generated"+Instant.now());
 
-		AuthenticationResponse response = AuthenticationResponse.builder().email(loginRequest.getEmail()).refreshToken(refrshtoken)
+		AuthenticationResponse response = AuthenticationResponse.builder().email(loginRequest.getEmail()).refreshToken(refreshToken)
 				.authenticationToken(jwtToken).build();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	public ResponseEntity<AuthenticationResponse> createNewFreshtoken(RefreshTokenRequest refreshRequest) {
+	public ResponseEntity<AuthenticationResponse> createNewRefreshtoken(RefreshTokenRequest refreshRequest) {
 
 		AuthenticationResponse newResponse;
 
@@ -102,12 +105,10 @@ public class RestAuthService {
 	}
 
 	public ResponseEntity<?> logout(RefreshTokenRequest refreshRequest) {
-
 		refreshTokenService.deleteFreshtoken(refreshRequest.getRefreshToken());
-		
 		jwtProvider.invalidateToken(refreshRequest.getJwtToken());
-		
-		return ResponseEntity.status(HttpStatus.OK).build();
+		String message=new MessageSourceAccessor(messagesource).getMessage("logoutmessage");
+		return ResponseEntity.status(HttpStatus.OK).body(message);
 	}
 
 }

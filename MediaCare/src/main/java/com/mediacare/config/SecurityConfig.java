@@ -1,6 +1,6 @@
 package com.mediacare.config;
 
-import com.mediacare.rest.exception.RestAccesDeniedHandler;
+import com.mediacare.rest.exception.RestAccessDeniedHandler;
 import com.mediacare.rest.exception.RestAuthHandler;
 import com.mediacare.rest.utils.JwtFilter;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +37,7 @@ public class SecurityConfig{
 		private final JwtFilter jwtFilter;
 		private final PasswordEncoder passwordEncoder;
 		private final RestAuthHandler restAuthFailure;
-		private final RestAccesDeniedHandler restAccessHandler;
+		private final RestAccessDeniedHandler restAccessHandler;
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth){
 			auth.authenticationProvider(dao());

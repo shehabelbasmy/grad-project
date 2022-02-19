@@ -34,7 +34,7 @@ public class RestAuthController{
 	}
 
 	@GetMapping("/test")
-	@Secured("ADMIN")
+	@Secured("PATIENT")
 	public String test() {
 
 		return "test";
@@ -59,7 +59,7 @@ public class RestAuthController{
 		if (bindResult.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		return authService.createNewFreshtoken(reTokenRequest);
+		return authService.createNewRefreshtoken(reTokenRequest);
 		
 	}
 }
