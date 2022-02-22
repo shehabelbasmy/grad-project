@@ -4,12 +4,10 @@ import com.mediacare.mvc.dto.NewUserDto;
 import com.mediacare.rest.dto.AuthenticationResponse;
 import com.mediacare.rest.dto.LoginRequest;
 import com.mediacare.rest.dto.RefreshTokenRequest;
-import com.mediacare.service.RestAuthService;
+import com.mediacare.rest.service.RestAuthService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,17 +27,17 @@ public class RestAuthController{
 	}
 
 	@PostMapping("/register")
-	public NewUserDto register(
+	public AuthenticationResponse register(
 			@RequestBody @Valid NewUserDto newUserDto){
 
 		return authService.register(newUserDto);
 	}
 
 	@GetMapping("/test")
-	@Secured("ADMIN")
+	@Secured("PATIENT")
 	public String test() {
 
-		return "test";
+		return "Hello From Test Endpoint";
 	}
 	
 	@PostMapping("/logout")

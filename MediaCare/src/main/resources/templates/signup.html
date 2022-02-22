@@ -41,6 +41,12 @@
 				<li th:each="error : ${#fields.errors('password')}" class="error" th:text="${error}"/>
 			</ul>
 		</div>
+		<input placeholder="Enter your password" name="confirmPassword" type="password" th:field="*{confirmPassword}"/><br/>
+		<div th:if="${#fields.hasAnyErrors()}">
+			<ul>
+				<li th:each="error : ${#fields.errors('confirmPassword')}" class="error" th:text="${error}"/>
+			</ul>
+		</div>
 		
 		<button type="submit">Submit</button>
 	</form>

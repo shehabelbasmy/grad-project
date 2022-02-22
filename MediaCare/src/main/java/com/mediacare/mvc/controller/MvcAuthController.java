@@ -3,6 +3,7 @@ package com.mediacare.mvc.controller;
 import javax.validation.Valid;
 
 import com.mediacare.mvc.dto.NewUserDto;
+import com.mediacare.mvc.service.MvcAuthService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,16 +15,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mediacare.service.RestAuthService;
-
 import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("/admin")
 @AllArgsConstructor
-public class AuthController {
+public class MvcAuthController {
 
-	private final RestAuthService authService; 
+	private final MvcAuthService authService;
 	
 	@GetMapping("/signup")
 	public String signUp(Model theModel) {
@@ -32,42 +31,34 @@ public class AuthController {
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 			return "redirect:/admin/profile";
 		}
-		
-		NewUserDto theNewUser=new NewUserDto();
-		
-		theModel.addAttribute("newUser", theNewUser);
+		theModel.addAttribute("newUser", new NewUserDto());
 		
 		return "signup";
 	}
 
 	@PostMapping("/processRegister")
-	public String processSignUp(
-			@ModelAttribute("newUser") 
-			@Valid NewUserDto theNewUser,
-			BindingResult bindingResult) {
-		
-		if(bindingResult.hasErrors()) {
+	public String processSignUp(@ModelAttribute("newUser") @Valid NewUserDto theNewUser, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()){
+
 			return "signup";
 		}
-		
 		authService.register(theNewUser);
 		
-		return "redirect:/";
+		return "redirect:/admin/profile";
 	}
 	@GetMapping("/login")
 	public String login(){
-		
-		var authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		if (!	(authentication instanceof AnonymousAuthenticationToken)) {
+		var authentication =
+				SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 			return "redirect:/admin/profile";
 		}
 		return"login";
 	}
-	
-	@GetMapping("/test")
-	@Secured("PATIENT")
+	@GetMapping("/home")
+	@Secured("ADMIN")
 	public String home(){
+
 		return "home";
 	}
 

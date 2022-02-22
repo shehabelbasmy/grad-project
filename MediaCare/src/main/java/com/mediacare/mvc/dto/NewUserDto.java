@@ -1,6 +1,7 @@
 package com.mediacare.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mediacare.util.FieldMatch;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@FieldMatch.List({@FieldMatch(first = "password",second = "confirmPassword",message = "Password doesn't match")})
 @Data
 @NoArgsConstructor
 public class NewUserDto {
@@ -33,4 +35,9 @@ public class NewUserDto {
 	@Size(min = 8,message = "password must be at least 8 Character")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
+
+	@NotBlank(message = "Confirm Password is required")
+	@Size(min = 8,message = "password must be at least 8 Character")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String confirmPassword;
 }
