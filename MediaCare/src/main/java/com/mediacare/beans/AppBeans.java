@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 @Configuration
 public class AppBeans {
 
-    //ar_EG_#Arab
+
     @Bean
     public LocaleResolver localeResolver() {
         final AcceptHeaderLocaleResolver slr= new AcceptHeaderLocaleResolver();

@@ -1,5 +1,6 @@
 package com.mediacare.rest.controller;
 
+import com.mediacare.mvc.dto.NewUserDto;
 import com.mediacare.rest.dto.AuthenticationResponse;
 import com.mediacare.rest.dto.LoginRequest;
 import com.mediacare.rest.dto.RefreshTokenRequest;
@@ -16,25 +17,26 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-@Valid
 public class RestAuthController{
 
 	private final RestAuthService authService;
 
-	
 	@PostMapping("/login")
-	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest
-			,BindingResult bindingResult) {
-
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
+	public ResponseEntity<?> login(
+			@RequestBody  @Valid LoginRequest loginRequest) {
 
 		return authService.login(loginRequest);
 	}
 
+	@PostMapping("/register")
+	public NewUserDto register(
+			@RequestBody @Valid NewUserDto newUserDto){
+
+		return authService.register(newUserDto);
+	}
+
 	@GetMapping("/test")
-	@Secured("PATIENT")
+	@Secured("ADMIN")
 	public String test() {
 
 		return "test";
@@ -42,23 +44,15 @@ public class RestAuthController{
 	
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(
-			@RequestBody RefreshTokenRequest request,
-			BindingResult bindResult){
+			@RequestBody @Valid RefreshTokenRequest request){
 		
-		if (bindResult.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-		
-		return authService.logout(request);
+ 			return authService.logout(request);
 	}
 	
 	@PostMapping("/refreshToken")
-	public ResponseEntity<AuthenticationResponse> refreshToken(
-			@RequestBody RefreshTokenRequest reTokenRequest,
-			BindingResult bindResult) {
-		if (bindResult.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
+	public ResponseEntity<?> refreshToken(
+			@RequestBody @Valid RefreshTokenRequest reTokenRequest) {
+
 		return authService.createNewRefreshtoken(reTokenRequest);
 		
 	}

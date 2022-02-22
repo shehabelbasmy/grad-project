@@ -2,7 +2,7 @@ package com.mediacare.mvc.controller;
 
 import javax.validation.Valid;
 
-import com.mediacare.mvc.dto.NewUserForm;
+import com.mediacare.mvc.dto.NewUserDto;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +33,7 @@ public class AuthController {
 			return "redirect:/admin/profile";
 		}
 		
-		NewUserForm theNewUser=new NewUserForm();
+		NewUserDto theNewUser=new NewUserDto();
 		
 		theModel.addAttribute("newUser", theNewUser);
 		
@@ -43,7 +43,7 @@ public class AuthController {
 	@PostMapping("/processRegister")
 	public String processSignUp(
 			@ModelAttribute("newUser") 
-			@Valid NewUserForm theNewUser,
+			@Valid NewUserDto theNewUser,
 			BindingResult bindingResult) {
 		
 		if(bindingResult.hasErrors()) {

@@ -1,20 +1,16 @@
 package com.mediacare.rest.dto;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class RefreshTokenRequest {
 
-	@NotBlank
-	private String refreshToken;
-	
-	@NotBlank
+	@NotBlank(message = "Is Required")
 	private String jwtToken;
+
+	@NotBlank(message = "Is Required")
+	private String refreshToken;
 	
 }

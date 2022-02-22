@@ -118,9 +118,7 @@ public class JwtProvider {
 
 		try {
 			parseJwtToke(jwt,null);
-			
 			if(jwtQueue.contains(jwt)) {
-				
 				return false;
 			}
 		}catch (Exception e) { 
@@ -177,7 +175,7 @@ public class JwtProvider {
 			parseJwtToke(jwtToken, null);
 			return false;
 			
-		} catch (ExpiredJwtException e) {
+		} catch (Exception e) {
 
 			if (e instanceof ExpiredJwtException) {
 				return true;	
@@ -198,19 +196,13 @@ public class JwtProvider {
 	}
 	
 	public void invalidateToken(String jwt) {
-		
-
 		if (jwtQueue.isEmpty()) {
 			executor.scheduleAtFixedRate(
-				clearJwtTask,
-				jwtExpirationMills,
-				jwtExpirationMills, 
-				TimeUnit.MILLISECONDS);
+			clearJwtTask,
+			jwtExpirationMills,
+			jwtExpirationMills,
+			TimeUnit.MILLISECONDS);
 		}
-		
 		jwtQueue.add(jwt);
-
-		System.out.println("Logout"+Instant.now());
-				
 	}
 }

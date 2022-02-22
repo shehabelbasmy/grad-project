@@ -24,8 +24,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.AllArgsConstructor;
 
-@EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true,prePostEnabled = true,securedEnabled = true)
+@EnableWebSecurity(debug = true)
+@EnableMethodSecurity(jsr250Enabled = true,securedEnabled = true)
 public class SecurityConfig{
 
 	@Configuration
@@ -46,12 +46,13 @@ public class SecurityConfig{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			
-			http.requestMatcher(new AntPathRequestMatcher("/api/**"));
-			http.csrf().disable()
+			http.requestMatcher(new AntPathRequestMatcher("/api/**"))
+				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/api/logout","/api/refreshToken","/api/login","/api/signup").permitAll()
+				.antMatchers("/api/register","/api/logout","/api/refreshToken","/api/login","/api/signup").permitAll()
 				.anyRequest().authenticated()
 				.and()
+					.logout().disable()
 					.exceptionHandling()
 					.authenticationEntryPoint(restAuthFailure)
 					.accessDeniedHandler(restAccessHandler)
@@ -83,7 +84,8 @@ public class SecurityConfig{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.authorizeRequests()
+			http.requestMatcher(new AntPathRequestMatcher("/admin/**"))
+				.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/admin/login","/admin/signup").permitAll()
 				.antMatchers("/admin/profile").authenticated()
