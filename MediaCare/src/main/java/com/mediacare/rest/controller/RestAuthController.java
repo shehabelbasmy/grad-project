@@ -34,7 +34,7 @@ public class RestAuthController{
 	}
 
 	@GetMapping("/test")
-	@Secured("PATIENT")
+	@Secured("ADMIN")
 	public String test() {
 
 		return "Hello From Test Endpoint";

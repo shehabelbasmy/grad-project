@@ -2,6 +2,7 @@ package com.mediacare.rest.service;
 
 import javax.transaction.Transactional;
 
+import com.mediacare.enums.Authority;
 import com.mediacare.mapper.MyUserMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -42,8 +43,8 @@ public class RestAuthService {
 		MyUser entity = myUserMapper.newUserToEntityUser(newUser);
 		entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		entity=userRepo.save(entity);
-		SpringUser springUser = new SpringUser(entity);
-		String jwtToken=jwtProvider.generateToken(springUser);
+
+		String jwtToken=jwtProvider.generateToken(newUser.getEmail(),entity.getAuthority());
 		String refreshToken=refreshTokenService.generateRefreshToken().getToken();
 
 		return buildAuthenticationResponse(refreshToken,jwtToken);
@@ -56,7 +57,8 @@ public class RestAuthService {
 		Authentication authentication = this.authenticationManager.authenticate(userToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String refreshToken = refreshTokenService.generateRefreshToken().getToken();
-		String jwtToken = jwtProvider.generateToken((SpringUser) authentication.getPrincipal());
+		Authority authority = Authority.valueOf(authentication.getAuthorities().iterator().next().getAuthority());
+		String jwtToken = jwtProvider.generateToken(loginRequest.getEmail(),authority);
 		AuthenticationResponse response =
 				AuthenticationResponse.builder()
 					.email(loginRequest.getEmail())
@@ -72,7 +74,7 @@ public class RestAuthService {
 			if (jwtProvider.isTokenExpired(refreshRequest.getJwtToken())) {
 				String refreshTest = refreshTokenService.checkForTokenExist(refreshRequest.getRefreshToken());
 				if (refreshTest != null) {
-					String newToken = jwtProvider.newtokenFromSameJwt(refreshRequest.getJwtToken());
+					String newToken = jwtProvider.newTokenFromSameJwt(refreshRequest.getJwtToken());
 					newResponse = buildAuthenticationResponse(refreshTest, newToken);
 					return ResponseEntity.status(HttpStatus.OK).body(newResponse);
 				}

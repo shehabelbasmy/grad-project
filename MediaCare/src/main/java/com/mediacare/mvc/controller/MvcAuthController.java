@@ -55,12 +55,6 @@ public class MvcAuthController {
 		}
 		return"login";
 	}
-	@GetMapping("/home")
-	@Secured("ADMIN")
-	public String home(){
-
-		return "home";
-	}
 
 
 }

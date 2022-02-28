@@ -11,7 +11,6 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "refresh_token")
 public class RefreshToken {
 
 	@Id
@@ -19,7 +18,7 @@ public class RefreshToken {
 	@Column(name = "id")
 	private int id ;
 	
-	@Column(name = "token",length = 255)
+	@Column(name = "token")
 	private String token;
 
 }

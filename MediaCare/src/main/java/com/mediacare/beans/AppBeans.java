@@ -15,31 +15,40 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Configuration
 public class AppBeans {
-
-
     @Bean
     public LocaleResolver localeResolver() {
         final AcceptHeaderLocaleResolver slr= new AcceptHeaderLocaleResolver();
-        Locale arabic = new Locale.Builder().setLanguage("ar").setScript("Arab").setRegion("EG").build();
+        Locale arabic = new Locale.Builder()
+                .setLanguage("ar")
+                .setScript("Arab")
+                .setRegion("EG")
+                .build();
         slr.setSupportedLocales(Arrays.asList(Locale.ENGLISH, arabic));
         return slr;
     }
+//    @Bean
+//    public LocaleResolver localeResolver() {
+//        final CookieLocaleResolver slr= new CookieLocaleResolver();
+////        Locale arabic = new Locale.Builder()
+////                .setLanguage("ar")
+////                .setScript("Arab")
+////                .setRegion("EG")
+////                .build();
+////        slr.locale
+//        return slr;
+//    }
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
         return lci;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public Queue<String> jwtQueue(){
         return new ConcurrentLinkedDeque<>();
     }
-
-
-
 }

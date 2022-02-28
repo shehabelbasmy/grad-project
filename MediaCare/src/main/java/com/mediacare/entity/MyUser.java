@@ -1,22 +1,14 @@
 package com.mediacare.entity;
 
-import javax.persistence.*;
-
 import com.mediacare.enums.Authority;
-import com.mediacare.enums.Gender;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "user")
 @Inheritance(strategy = InheritanceType.JOINED)
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "`user`")
 public class MyUser {
 
 	@Id

@@ -16,4 +16,9 @@ public class AdminController {
         modelAndView.setViewName("profile");
         return modelAndView;
     }
+    @GetMapping("/home")
+    public String home(){
+
+        return "home";
+    }
 }

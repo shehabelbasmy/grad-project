@@ -24,7 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.AllArgsConstructor;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true,securedEnabled = true)
 public class SecurityConfig{
 
@@ -40,6 +40,7 @@ public class SecurityConfig{
 		private final RestAccessDeniedHandler restAccessHandler;
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth){
+
 			auth.authenticationProvider(dao());
 		}
 		
