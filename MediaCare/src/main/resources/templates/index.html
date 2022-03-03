@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Media Care</title>
 </head>
 <body>
-	Home Page<br>
-	<a th:href="@{admin/login}">Login</a> <br>
-	<a th:href="@{admin/signup}">Sign Up</a> <br>
-	<a th:href="@{admin/home}">Home Secured</a><br>
-	<a th:href="@{admin/logout}">Logout</a><br>
-	<a th:href="@{admin/profile}">Profile</a><br>
 
+	<div sec:authorize="isAuthenticated()">
+		Hi,<div sec:authentication="name"></div>
+		<a th:href="@{/logout}">Logout</a>
+	</div>
+	<div sec:authorize="isAnonymous()">
+		<a th:href="@{/login}">Login</a>
+	</div>
+	<h1>Home Page</h1>
+	<a th:href="@{/signup}">Sign Up</a> <br>
+	<a th:href="@{/home}">Home Secured</a><br>
+	<a th:href="@{/profile}">Profile</a><br>
 
 </body>
 </html>

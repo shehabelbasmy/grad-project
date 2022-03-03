@@ -12,7 +12,7 @@
 <body>
 	<p>Register New User</p>
 
-	<form th:action="@{/admin/processRegister}" method="POST" th:object="${newUser}">
+	<form th:action="@{/processRegister}" method="POST" th:object="${newUser}">
 		<input placeholder="Enter your FirstName" name="firstName" type="text" th:field="*{firstName}"/><br />
 		<div th:if="${#fields.hasAnyErrors()}">
 			<ul>

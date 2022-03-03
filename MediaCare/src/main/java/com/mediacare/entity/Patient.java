@@ -1,19 +1,20 @@
 package com.mediacare.entity;
 
-import java.sql.Time;
-
-import javax.persistence.*;
-
 import com.mediacare.enums.Gender;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import java.sql.Time;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Patient extends MyUser {
+public class Patient extends User {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
 	private Gender gender;

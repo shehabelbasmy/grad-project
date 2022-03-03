@@ -1,10 +1,8 @@
 package com.mediacare.mvc.controller;
 
-import javax.validation.Valid;
-
 import com.mediacare.mvc.dto.NewUserDto;
 import com.mediacare.mvc.service.MvcAuthService;
-import org.springframework.security.access.annotation.Secured;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,21 +13,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.AllArgsConstructor;
+import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/admin")
-@AllArgsConstructor
-public class MvcAuthController {
+@RequestMapping("/")
+@RequiredArgsConstructor
+public class AdminAuthController {
 
 	private final MvcAuthService authService;
 	
 	@GetMapping("/signup")
 	public String signUp(Model theModel) {
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
-		
+
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return "redirect:/admin/profile";
+			return "redirect:/profile";
 		}
 		theModel.addAttribute("newUser", new NewUserDto());
 		
@@ -42,16 +40,15 @@ public class MvcAuthController {
 
 			return "signup";
 		}
-		authService.register(theNewUser);
+		authService.registerNewAdmin(theNewUser);
 		
-		return "redirect:/admin/profile";
+		return "redirect:/profile";
 	}
 	@GetMapping("/login")
 	public String login(){
-		var authentication =
-				SecurityContextHolder.getContext().getAuthentication();
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return "redirect:/admin/profile";
+			return "redirect:/profile";
 		}
 		return"login";
 	}

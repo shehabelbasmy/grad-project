@@ -1,16 +1,15 @@
 package com.mediacare.dao;
 
-import java.util.Optional;
-
+import com.mediacare.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mediacare.entity.MyUser;
-import com.mediacare.enums.Authority;
+import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<MyUser, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-	public Optional<MyUser> findByEmail(String email);
+	Optional<User> findByEmail(String email);
+
 
 }

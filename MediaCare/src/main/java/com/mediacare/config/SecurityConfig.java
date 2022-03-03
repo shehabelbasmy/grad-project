@@ -1,8 +1,11 @@
 package com.mediacare.config;
 
+import com.mediacare.mvc.service.UserDetailsServiceMVC;
 import com.mediacare.rest.exception.RestAccessDeniedHandler;
 import com.mediacare.rest.exception.RestAuthHandler;
+import com.mediacare.rest.service.UserDetailsServiceRest;
 import com.mediacare.rest.utils.JwtFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,32 +13,30 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import lombok.AllArgsConstructor;
-
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(jsr250Enabled = true,securedEnabled = true)
+@AllArgsConstructor
 public class SecurityConfig{
+
+	private final PasswordEncoder passwordEncoder;
 
 	@Configuration
 	@Order(1)
 	@AllArgsConstructor
-	public static class SecurityConfigForRest extends WebSecurityConfigurerAdapter{
+	public class SecurityConfigForRest extends WebSecurityConfigurerAdapter{
 		
-		private final UserDetailsService userDetailsService;
+		private final UserDetailsServiceRest userDetailsServiceRest;
 		private final JwtFilter jwtFilter;
-		private final PasswordEncoder passwordEncoder;
 		private final RestAuthHandler restAuthFailure;
 		private final RestAccessDeniedHandler restAccessHandler;
 		@Override
@@ -66,12 +67,12 @@ public class SecurityConfig{
 		public AuthenticationProvider dao(){
 			DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
 			dao.setPasswordEncoder(passwordEncoder);
-			dao.setUserDetailsService(userDetailsService);
+			dao.setUserDetailsService(userDetailsServiceRest);
 			return dao;
 		}
 
 		@Override
-		@Bean(BeanIds.AUTHENTICATION_MANAGER)
+		@Bean("authManagerRest")
 		public AuthenticationManager authenticationManagerBean() throws Exception {
 			return super.authenticationManagerBean();
 		}
@@ -80,30 +81,31 @@ public class SecurityConfig{
 	@Configuration
 	@Order(2)
 	@AllArgsConstructor
-	public static class SecurityConfigForMvc extends WebSecurityConfigurerAdapter{
+	public class SecurityConfigForMvc extends WebSecurityConfigurerAdapter{
+
+		private final UserDetailsServiceMVC userDetailsServiceMVC;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.requestMatcher(new AntPathRequestMatcher("/admin/**"))
-				.authorizeRequests()
+			http.authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers("/admin/login","/admin/signup").permitAll()
-				.antMatchers("/admin/profile").authenticated()
-				.antMatchers("/admin/home").authenticated()
+				.antMatchers("/login","/signup").permitAll()
+				.antMatchers("/profile").authenticated()
+				.antMatchers("/home").authenticated()
 				.and()
 					.formLogin()
-					.loginPage("/admin/login")
+					.loginPage("/login")
 					.usernameParameter("email")
 					.passwordParameter("password")
-					.loginProcessingUrl("/admin/processLogin")
+					.loginProcessingUrl("/processLogin")
 					.defaultSuccessUrl("/")
 				.and()
 					.exceptionHandling()
 					.accessDeniedPage("/error/accessdenied")
 				.and()
 					.logout()
-					.logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", HttpMethod.GET.toString()))
+					.logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.GET.toString()))
 					.logoutSuccessUrl("/")
 					.invalidateHttpSession(true)
 					.clearAuthentication(true)
@@ -113,6 +115,24 @@ public class SecurityConfig{
 
 		}
 
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.authenticationProvider(daoForMVC());
+		}
+
+		@Bean
+		public AuthenticationProvider daoForMVC(){
+			DaoAuthenticationProvider daoAuthenticationProvider= new DaoAuthenticationProvider();
+			daoAuthenticationProvider.setUserDetailsService(userDetailsServiceMVC);
+			daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+			return daoAuthenticationProvider;
+		}
+
+		@Override
+		@Bean("authManagerMVC")
+		public AuthenticationManager authenticationManagerBean() throws Exception {
+			return super.authenticationManagerBean();
+		}
 	}
 
 }

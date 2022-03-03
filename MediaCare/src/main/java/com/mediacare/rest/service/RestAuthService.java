@@ -1,9 +1,15 @@
 package com.mediacare.rest.service;
 
-import javax.transaction.Transactional;
-
+import com.mediacare.entity.Patient;
 import com.mediacare.enums.Authority;
 import com.mediacare.mapper.MyUserMapper;
+import com.mediacare.mvc.dto.NewUserDto;
+import com.mediacare.rest.dao.PatientRepository;
+import com.mediacare.rest.dto.AuthenticationResponse;
+import com.mediacare.rest.dto.LoginRequest;
+import com.mediacare.rest.dto.RefreshTokenRequest;
+import com.mediacare.rest.utils.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
@@ -15,36 +21,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mediacare.dao.UserRepository;
-import com.mediacare.rest.dto.AuthenticationResponse;
-import com.mediacare.rest.dto.LoginRequest;
-import com.mediacare.mvc.dto.NewUserDto;
-import com.mediacare.rest.dto.RefreshTokenRequest;
-import com.mediacare.entity.MyUser;
-import com.mediacare.util.SpringUser;
-import com.mediacare.rest.utils.JwtProvider;
-
-import lombok.AllArgsConstructor;
+import javax.transaction.Transactional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RestAuthService {
 
-	private final UserRepository userRepo;
+	private final PatientRepository patientRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
 	private final MessageSource messagesource;
 	private final MyUserMapper myUserMapper;
+	private final AuthenticationManager authManagerRest;
+
 	@Transactional
-	public AuthenticationResponse register(NewUserDto newUser) {
+	public AuthenticationResponse registerNewPatient(NewUserDto newUser) {
 
-		MyUser entity = myUserMapper.newUserToEntityUser(newUser);
-		entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-		entity=userRepo.save(entity);
-
-		String jwtToken=jwtProvider.generateToken(newUser.getEmail(),entity.getAuthority());
+		Patient patient = myUserMapper.newUserToPatient(newUser);
+		patient.setPassword(passwordEncoder.encode(patient.getPassword()));
+		patientRepository.save(patient);
+		String jwtToken=jwtProvider.generateToken(newUser.getEmail(),patient.getAuthority());
 		String refreshToken=refreshTokenService.generateRefreshToken().getToken();
 
 		return buildAuthenticationResponse(refreshToken,jwtToken);
@@ -54,7 +51,7 @@ public class RestAuthService {
 
 		UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
 				loginRequest.getPassword());
-		Authentication authentication = this.authenticationManager.authenticate(userToken);
+		Authentication authentication = this.authManagerRest.authenticate(userToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 		Authority authority = Authority.valueOf(authentication.getAuthorities().iterator().next().getAuthority());

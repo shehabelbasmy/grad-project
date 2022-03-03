@@ -1,15 +1,12 @@
 package com.mediacare.rest.service;
 
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
+import com.mediacare.entity.RefreshToken;
+import com.mediacare.rest.dao.RefreshTokenRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.mediacare.dao.RefreshTokenRepo;
-import com.mediacare.entity.RefreshToken;
-
-import lombok.AllArgsConstructor;
+import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 @Transactional

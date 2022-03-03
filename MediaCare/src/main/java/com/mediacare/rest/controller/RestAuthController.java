@@ -30,11 +30,11 @@ public class RestAuthController{
 	public AuthenticationResponse register(
 			@RequestBody @Valid NewUserDto newUserDto){
 
-		return authService.register(newUserDto);
+		return authService.registerNewPatient(newUserDto);
 	}
 
 	@GetMapping("/test")
-	@Secured("ADMIN")
+	@Secured("PATIENT")
 	public String test() {
 
 		return "Hello From Test Endpoint";

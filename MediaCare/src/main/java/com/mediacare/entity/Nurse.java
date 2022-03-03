@@ -1,22 +1,20 @@
 package com.mediacare.entity;
 
-import java.sql.Time;
+import com.mediacare.enums.Gender;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import com.mediacare.enums.Gender;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.sql.Time;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Nurse extends MyUser{
+public class Nurse extends User {
 
 	@Column(name = "phone_number",length = 11)
 	private Integer phoneNumber;

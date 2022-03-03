@@ -1,29 +1,28 @@
 package com.mediacare.util;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import com.mediacare.entity.User;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mediacare.entity.MyUser;
-
-import lombok.NoArgsConstructor;
+import java.util.Collection;
+import java.util.Collections;
 
 @NoArgsConstructor
 public class SpringUser implements UserDetails {
 
-	private MyUser user;
+	private User user;
 
-	public SpringUser(MyUser user) {
+	public SpringUser(User user) {
 		this.user=user;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		SimpleGrantedAuthority simpleAuthority =new SimpleGrantedAuthority(user.getAuthority().toString()); 
+		SimpleGrantedAuthority simpleAuthority =
+				new SimpleGrantedAuthority(user.getAuthority().toString());
 		
 		return Collections.singletonList(simpleAuthority);
 	}
