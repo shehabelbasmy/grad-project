@@ -1,7 +1,7 @@
 package com.mediacare.mvc.service;
 
 import com.mediacare.entity.Admin;
-import com.mediacare.mapper.MyUserMapper;
+import com.mediacare.mapper.UserMapper;
 import com.mediacare.mvc.dao.AdminRepository;
 import com.mediacare.mvc.dto.NewUserDto;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class MvcAuthService{
     private final AdminRepository adminRepository;
-    private final MyUserMapper myUserMapper;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManagerMVC;
 
     @Transactional
     public void registerNewAdmin(NewUserDto newUser) {
-        Admin admin = myUserMapper.newUserToAdmin(newUser);
+        Admin admin = userMapper.newUserToAdmin(newUser);
         admin.setPassword(passwordEncoder.encode(newUser.getPassword()));
         adminRepository.save(admin);
         UsernamePasswordAuthenticationToken userToken =

@@ -2,7 +2,7 @@ package com.mediacare.rest.service;
 
 import com.mediacare.entity.Patient;
 import com.mediacare.enums.Authority;
-import com.mediacare.mapper.MyUserMapper;
+import com.mediacare.mapper.UserMapper;
 import com.mediacare.mvc.dto.NewUserDto;
 import com.mediacare.rest.dao.PatientRepository;
 import com.mediacare.rest.dto.AuthenticationResponse;
@@ -32,13 +32,13 @@ public class RestAuthService {
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
 	private final MessageSource messagesource;
-	private final MyUserMapper myUserMapper;
+	private final UserMapper userMapper;
 	private final AuthenticationManager authManagerRest;
 
 	@Transactional
 	public AuthenticationResponse registerNewPatient(NewUserDto newUser) {
 
-		Patient patient = myUserMapper.newUserToPatient(newUser);
+		Patient patient = userMapper.newUserToPatient(newUser);
 		patient.setPassword(passwordEncoder.encode(patient.getPassword()));
 		patientRepository.save(patient);
 		String jwtToken=jwtProvider.generateToken(newUser.getEmail(),patient.getAuthority());
@@ -57,11 +57,10 @@ public class RestAuthService {
 		Authority authority = Authority.valueOf(authentication.getAuthorities().iterator().next().getAuthority());
 		String jwtToken = jwtProvider.generateToken(loginRequest.getEmail(),authority);
 		AuthenticationResponse response =
-				AuthenticationResponse.builder()
-					.email(loginRequest.getEmail())
-					.refreshToken(refreshToken)
-					.authenticationToken(jwtToken)
-					.build();
+			AuthenticationResponse.builder()
+				.refreshToken(refreshToken)
+				.authenticationToken(jwtToken)
+				.build();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 

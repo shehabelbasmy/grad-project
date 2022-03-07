@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html th:dir="#{app.direction}" th:lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>
+
+	</title>
+</head>
+<body>
+	<p th:text="#{user.login.title}" />
+	
+	<div th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">
+	</div>
+	<form th:action="@{/processLogin}" method="POST" >
+
+		<input th:placeholder="#{user.username}" name="email" type="text" th:required="true"/><br />
+		<input th:placeholder="#{user.password}" name="password" type="password" th:required="true"/><br/>
+		
+		<input	 type="submit" th:value="#{user.submit}"/>
+	</form>
+
+</body>
+</html>

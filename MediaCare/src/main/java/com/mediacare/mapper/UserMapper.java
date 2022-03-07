@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface MyUserMapper {
+public interface UserMapper {
 
     @Mapping(target = "enabled",constant = "true")
     @Mapping(target = "authority",constant = "ADMIN")

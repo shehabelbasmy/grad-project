@@ -50,7 +50,7 @@ public class AdminAuthController {
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 			return "redirect:/profile";
 		}
-		return"login";
+		return "login2";
 	}
 
 

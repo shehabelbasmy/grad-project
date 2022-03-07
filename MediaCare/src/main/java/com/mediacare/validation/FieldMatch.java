@@ -1,4 +1,4 @@
-package com.mediacare.util;
+package com.mediacare.validation;
 
 
 import javax.validation.Constraint;

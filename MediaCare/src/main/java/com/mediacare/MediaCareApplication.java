@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MediaCareApplication {
 
 	public static void main(String[] args){
+
 		SpringApplication.run(MediaCareApplication.class, args);
 	}
-	
 }

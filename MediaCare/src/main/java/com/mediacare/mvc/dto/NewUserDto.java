@@ -1,7 +1,8 @@
 package com.mediacare.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mediacare.util.FieldMatch;
+import com.mediacare.validation.FieldMatch;
+import com.mediacare.validation.UniqueEmail;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class NewUserDto {
 
 	@NotBlank(message = "Email is required")
 	@Email(message = "Invalid")
+	@UniqueEmail
 	private String email;
 	
 	@NotBlank(message = "Password is required")
