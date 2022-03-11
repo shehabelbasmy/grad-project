@@ -88,11 +88,14 @@ public class SecurityConfig{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers("/login","/signup").permitAll()
-				.antMatchers("/profile").authenticated()
-				.antMatchers("/home").authenticated()
+			http.headers().frameOptions().disable()
+				.and()
+					.csrf().disable()
+					.authorizeRequests()
+					.antMatchers("/").permitAll()
+					.antMatchers("/login","/signup").permitAll()
+					.antMatchers("/profile").authenticated()
+					.antMatchers("/home").authenticated()
 				.and()
 					.formLogin()
 					.loginPage("/login")
@@ -112,7 +115,6 @@ public class SecurityConfig{
 				.and()
 				.sessionManagement()
 				.maximumSessions(1);
-			http.csrf().disable();
 		}
 
 		@Override
