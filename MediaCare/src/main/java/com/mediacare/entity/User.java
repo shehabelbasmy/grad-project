@@ -1,9 +1,19 @@
 package com.mediacare.entity;
 
-import com.mediacare.enums.Authority;
-import lombok.Data;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import com.mediacare.enums.Authority;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -12,7 +22,7 @@ import javax.persistence.*;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 

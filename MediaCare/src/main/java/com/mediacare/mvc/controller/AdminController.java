@@ -9,14 +9,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class AdminController {
 
-    @GetMapping("/profile")
+    @GetMapping("profile")
     public ModelAndView profile(){
         ModelAndView modelAndView  = new ModelAndView();
         modelAndView.getModelMap().addAttribute("profile","From Profile Controller");
         modelAndView.setViewName("profile");
         return modelAndView;
     }
-    @GetMapping("/home")
+    @GetMapping("home")
     public String home(){
 
         return "home";

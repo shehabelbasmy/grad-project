@@ -1,11 +1,5 @@
 package com.mediacare.config;
 
-import com.mediacare.mvc.service.UserDetailsServiceMVC;
-import com.mediacare.rest.exception.RestAccessDeniedHandler;
-import com.mediacare.rest.exception.RestAuthHandler;
-import com.mediacare.rest.service.UserDetailsServiceRest;
-import com.mediacare.rest.utils.JwtFilter;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,12 +10,21 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.mediacare.mvc.service.UserDetailsServiceMVC;
+import com.mediacare.rest.exception.RestAccessDeniedHandler;
+import com.mediacare.rest.exception.RestAuthHandler;
+import com.mediacare.rest.service.UserDetailsServiceRest;
+import com.mediacare.rest.utils.JwtFilter;
+
+import lombok.AllArgsConstructor;
 
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true,securedEnabled = true)
@@ -88,14 +91,16 @@ public class SecurityConfig{
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.headers().frameOptions().disable()
+			http.headers()
+				.frameOptions()
+				.disable()
 				.and()
 					.csrf().disable()
 					.authorizeRequests()
-					.antMatchers("/").permitAll()
-					.antMatchers("/login","/signup").permitAll()
+					.antMatchers("/","/login","/signup").permitAll()
 					.antMatchers("/profile").authenticated()
 					.antMatchers("/home").authenticated()
+					.anyRequest().authenticated()
 				.and()
 					.formLogin()
 					.loginPage("/login")
@@ -116,7 +121,7 @@ public class SecurityConfig{
 				.sessionManagement()
 				.maximumSessions(1);
 		}
-
+		
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.authenticationProvider(daoForMVC());
@@ -134,6 +139,11 @@ public class SecurityConfig{
 		@Bean("authManagerMVC")
 		public AuthenticationManager authenticationManagerBean() throws Exception {
 			return super.authenticationManagerBean();
+		}
+
+		@Override
+		public void configure(WebSecurity web) throws Exception {
+			web.ignoring().antMatchers("/css/**","/js/**","/img/**");
 		}
 	}
 

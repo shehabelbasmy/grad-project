@@ -78,7 +78,7 @@ public class RestAuthService {
 			newResponse = buildAuthenticationResponse(refreshRequest.getRefreshToken(), refreshRequest.getJwtToken());
 			return ResponseEntity.status(HttpStatus.OK).body(newResponse);
 		}
-		return new ResponseEntity("You Are Logged Out",HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("You Are Logged Out",HttpStatus.BAD_REQUEST);
 	}
 
 	private AuthenticationResponse buildAuthenticationResponse(String refreshTest, String jwtTest) {
