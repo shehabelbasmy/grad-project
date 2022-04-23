@@ -18,9 +18,11 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/error/accessdenied").setViewName("access-denied");
+//		registry.addViewController("/makePrediction").setViewName("make-prediction");
+		
 		WebMvcConfigurer.super.addViewControllers(registry);
 	}
-
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor);

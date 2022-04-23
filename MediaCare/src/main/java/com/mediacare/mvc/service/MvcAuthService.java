@@ -1,37 +1,48 @@
 package com.mediacare.mvc.service;
 
-import com.mediacare.entity.Admin;
-import com.mediacare.mapper.UserMapper;
-import com.mediacare.mvc.dao.AdminRepository;
-import com.mediacare.mvc.dto.NewUserDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.transaction.Transactional;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import com.mediacare.entity.Patient;
+import com.mediacare.enums.Authority;
+import com.mediacare.mapper.UserMapper;
+import com.mediacare.mvc.dto.NewUserDto;
+import com.mediacare.rest.dao.PatientRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class MvcAuthService{
-    private final AdminRepository adminRepository;
+    private final PatientRepository patientRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authManagerMVC;
+//    private final AuthenticationManager authManagerMVC;
 
     @Transactional
     public void registerNewAdmin(NewUserDto newUser) {
-        Admin admin = userMapper.newUserToAdmin(newUser);
-        admin.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        adminRepository.save(admin);
+        Patient patient = userMapper.newUserToPatient(newUser);
+        patient.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        patientRepository.save(patient);
         UsernamePasswordAuthenticationToken userToken =
                 new UsernamePasswordAuthenticationToken(newUser.getEmail(),
-                newUser.getPassword());
-        Authentication authentication = this.authManagerMVC.authenticate(userToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+                newUser.getPassword(),
+                getAuthority(patient.getAuthority()));
+//        Authentication authentication = this.authManagerMVC.authenticate(userToken);
+        SecurityContextHolder.getContext().setAuthentication(userToken);
+    }
+    
+    private Collection<? extends GrantedAuthority> getAuthority(Authority authority2){
+    	SimpleGrantedAuthority authority = new SimpleGrantedAuthority(authority2.toString());
+    	return Collections.singletonList(authority);
     }
 }

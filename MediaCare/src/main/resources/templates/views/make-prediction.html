@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<!-- add-appointment24:07-->
+<head th:include="../fragments/header :: header">
+</head>
+
+<body>
+    <div class="main-wrapper">
+       <div th:replace="../fragments/navbar :: navbar"></div>
+		<div th:replace="../fragments/sidebar :: sidebar"></div>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Make Prediction</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                    <div ></div>
+                        <form th:object="${predictionTemp}" method="post" th:action="@{/processPrediction}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+										<label>Resting Bp</label>
+										<select th:field="*{chestPain}" class="form-select" aria-label="Default select example">
+											<option th:each="chestPain : ${T(com.mediacare.mvc.dto.ChestPain).values()}"
+													th:value="${chestPain.value}" th:text="${chestPain.toString()}"></option>
+										</select>
+									</div>
+                                </div>
+                                <div class="col-md-6">
+									<div class="form-group">
+										<label>Resting BP</label>
+										<input type="number" th:field="*{restingBP}" class="form-control"/>
+									</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Cholestrol</label>
+                                        <input th:field="*{cholestrol}" class="form-control" type="number"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Fasting BG</label>
+                                        <select class="form-select" th:filed="*{fastingBg}">
+                                        	<option th:value="true">Greater Than 120</option>
+                                        	<option th:value="false">Smaller Than 120</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Rest ECG</label>
+                                        <input type="number" th:field="*{restECG}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Max HR</label>
+                                        <input type="number" class="form-control" th:field="*{maxHR}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Exercise Agina</label>
+                                        <select th:field="*{exerciseAgina}" class="form-control" aria-label="Default select Example">
+                                        	<option th:value="false">No</option>
+                                        	<option th:value="true">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Old Peak</label>
+                                        <input class="form-control" type="number" th:field="*{oldPeak}">
+                                    </div>
+                                </div>
+                            </div>
+<!--                             <div class="form-group"> -->
+<!--                                 <label>Message</label> -->
+<!--                                 <textarea cols="30" rows="4" class="form-control"></textarea> -->
+<!--                             </div> -->
+<!--                             <div class="form-group"> -->
+<!--                                 <label class="display-block">Appointment Status</label> -->
+<!-- 								<div class="form-check form-check-inline"> -->
+<!-- 									<input class="form-check-input" type="radio" name="status" id="product_active" value="option1" checked> -->
+<!-- 									<label class="form-check-label" for="product_active"> -->
+<!-- 									Active -->
+<!-- 									</label> -->
+<!-- 								</div> -->
+<!-- 								<div class="form-check form-check-inline"> -->
+<!-- 									<input class="form-check-input" type="radio" name="status" id="product_inactive" value="option2"> -->
+<!-- 									<label class="form-check-label" for="product_inactive"> -->
+<!-- 									Inactive -->
+<!-- 									</label> -->
+<!-- 								</div> -->
+<!--                             </div> -->
+                            <div class="m-t-20 text-center">
+                                <button class="btn btn-primary submit-btn">Make Prediction</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+			
+        </div>
+    </div>
+    <div th:replace="../fragments/footer :: page-scripts"></div>
+</body>
+
+</html>

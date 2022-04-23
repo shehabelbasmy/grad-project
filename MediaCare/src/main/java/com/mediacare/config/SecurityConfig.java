@@ -87,7 +87,6 @@ public class SecurityConfig{
 	public class SecurityConfigForMvc extends WebSecurityConfigurerAdapter{
 
 		private final UserDetailsServiceMVC userDetailsServiceMVC;
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
@@ -97,10 +96,10 @@ public class SecurityConfig{
 				.and()
 					.csrf().disable()
 					.authorizeRequests()
-					.antMatchers("/","/login","/signup").permitAll()
+					.antMatchers("/","/login","/signup","/processRegister").permitAll()
 					.antMatchers("/profile").authenticated()
 					.antMatchers("/home").authenticated()
-					.anyRequest().authenticated()
+//					.anyRequest().authenticated()
 				.and()
 					.formLogin()
 					.loginPage("/login")
@@ -143,7 +142,7 @@ public class SecurityConfig{
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("/css/**","/js/**","/img/**");
+			web.ignoring().antMatchers("/css/**","/js/**","/img/**","/fonts/**");
 		}
 	}
 

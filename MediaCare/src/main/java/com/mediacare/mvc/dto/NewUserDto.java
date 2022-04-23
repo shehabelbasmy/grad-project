@@ -1,6 +1,7 @@
 package com.mediacare.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mediacare.enums.Gender;
 import com.mediacare.validation.FieldMatch;
 import com.mediacare.validation.UniqueEmail;
 import lombok.AccessLevel;
@@ -21,11 +22,11 @@ public class NewUserDto {
 	private int id;
 
 	@NotBlank(message = "Firstname is required")
-	@Size(min = 2, message = "At least 5 Character")
+	@Size(min = 5, message = "At least 5 Character")
 	private String firstName;
 	
 	@NotBlank(message = "Lastname is required")
-	@Size(min = 2,message = "At least 5 Character")
+	@Size(min = 5,message = "At least 5 Character")
 	private String lastName;
 
 	@NotBlank(message = "Email is required")
@@ -41,4 +42,7 @@ public class NewUserDto {
 	@Size(min = 8,message = "password must be at least 8 Character")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String confirmPassword;
+	
+	
+	private Gender gender;
 }

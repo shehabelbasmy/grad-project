@@ -9,7 +9,6 @@
 </head>
 <body>
 	
-	</div>
 	<!-- <form th:action="@{/processLogin}" method="POST" >
 
 		<input th:placeholder="#{user.username}" name="email" type="text" th:required="true"/><br />
@@ -27,16 +26,16 @@
 						<div class="account-logo">
                             <a href="index-2.html"><img th:src="@{/img/logo-dark.png}" alt=""></a>
                         </div>
-                        <div th:if="${param.error}" class="alert alert-danger"
+                        <div th:if="${param.error}" class="alert alert-danger" 
 						 th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"> 
 						</div>
                         <div class="form-group">
                             <label>Username or Email</label>
-                            <input name ="email" type="text" class="form-control">
+                            <input name ="email" th:required="true" type="text" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input name ="password" type="password" class="form-control">
+                            <input name ="password" th:required="true" type="password" class="form-control">
                         </div>
                         <div class="form-group text-right">
                             <a href="forgot-password.html">Forgot your password?</a>

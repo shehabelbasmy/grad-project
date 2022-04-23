@@ -122,6 +122,7 @@ a:focus {
 }
 a {
 	color: #009ce7;
+	text-decoration: none;;
 }
 input,
 button,

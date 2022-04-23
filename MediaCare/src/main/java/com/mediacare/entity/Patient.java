@@ -5,11 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
 import java.sql.Time;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,4 +35,6 @@ public class Patient extends User {
 	@DateTimeFormat(pattern = "yyyy-mm-dd : hh:mm")
 	private Time updateState;
 
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<Prediction> prediction;
 }

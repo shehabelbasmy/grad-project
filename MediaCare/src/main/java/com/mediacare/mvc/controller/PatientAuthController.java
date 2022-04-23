@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class AdminAuthController {
+public class PatientAuthController {
 
 	private final MvcAuthService authService;
 	
