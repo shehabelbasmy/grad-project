@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mediacare.mvc.dto.PredictionDto;
-
 @Controller
 @RequestMapping("/")
 public class PatientController {
@@ -23,27 +21,5 @@ public class PatientController {
 
         return "home";
     }
-    @GetMapping("makePrediction")
-    public ModelAndView makePredction() {
-    	ModelAndView modelAndView=new ModelAndView();
-    	
-    	modelAndView.getModelMap().addAttribute("predictionTemp", new PredictionDto());
-    	
-    	modelAndView.setViewName("make-prediction");
-    	
-    	return modelAndView;
-    }
     
-    @GetMapping("myPrediction")
-    public ModelAndView getListOfPrediction() {
-    	ModelAndView modelAndView=new ModelAndView();
-    	
-//    	List<Prediction> predictions= 
-//    	
-//    	modelAndView.getModelMap().addAttribute("listPrediction", predictions);
-    	
-    	modelAndView.setViewName("list-prediction");
-    	
-    	return modelAndView;
-    }
 }

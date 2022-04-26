@@ -2,10 +2,11 @@
 
 
 INSERT INTO `user`
-VALUES (1,'ADMIN','ahmed@gmail.com','1','Ahmed','El Ashry','$2a$04$o9rdMTL9dkW4zfG95kq8IOR.QDz1XfOZkCqfynAXBqwZ3HSIM/MwO'),
-(2,'PATIENT','yasser@gmail.com','1','Yasser','Mohamed','$2a$04$o9rdMTL9dkW4zfG95kq8IOR.QDz1XfOZkCqfynAXBqwZ3HSIM/MwO');
-
+VALUES (1,'ADMIN','mohamed@gmail.com','1','Ahmed','El Ashry','$2a$12$IQVQ.mNRBvXj8SzYYTBGzO3evH5PdP915jzfgat/m4OEMNPdxL466'),
+(2,'PATIENT','ahmed@gmail.com','1','Yasser','Mohamed','$2a$12$yWEJoJeo/wQnyJOCoige.ujOWbb2YJqAQwQRsiXP96yNvXv9CL7PC');
+-- patient password mohamed
+-- admin password ahmed
 INSERT INTO `admin`
-VALUES (1);
+VALUES (2);
 INSERT INTO `patient`
-VALUES ('MALE',null,null,null,2)
+VALUES ('MALE',null,null,null,1)

@@ -5,21 +5,26 @@ import lombok.Data;
 @Data
 public class PredictionDto {
 
-	private ChestPain chestPain;
+	private int age;
 	
-	private float restingBP;
+	private int sex;
 	
-	private float cholestrol;
+	private int restingBP;
 	
-	private boolean fastingBg;
+	private int cholesterol;
 	
-	private int restECG;
+	
+	private int fastingBS;
 	
 	private int maxHR;
 	
-	private boolean exerciseAgina;
+	private int exerciseAngina;
 	
 	private float oldPeak;
 	
-	private int st_slope;
+	private ChestPain chestPain;
+
+	private String restingECG;
+	
+	private STSlope stSlope;
 }

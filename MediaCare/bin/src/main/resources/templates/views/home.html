@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <a th:href="@{/}">Main Page</a>
+    <div sec:authorize="isAuthenticated()">
+        Authenticated as <span sec:authentication="name"></span>
+    </div>
+</body>
+</html>

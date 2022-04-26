@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  lang="en" 
+	  xmlns:th="http://www.thymeleaf.org">
+<head th:include="../fragments/header :: header">
+    
+</head>
+<body>
+
+	<div th:insert="../fragments/navbar :: navbar"></div>
+	<div th:insert="../fragments/sidebar :: sidebar"></div>
+    <a th:href="@{/logout}">Logout</a><br>
+    <div th:replace="../fragments/footer :: page-scripts"></div>
+    
+</body>
+</html>
