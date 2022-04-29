@@ -1,16 +1,24 @@
 package com.mediacare.rest.controller;
 
+import java.util.Collections;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.mediacare.mvc.dto.NewUserDto;
-import com.mediacare.rest.dto.AuthenticationResponse;
 import com.mediacare.rest.dto.LoginRequest;
 import com.mediacare.rest.dto.RefreshTokenRequest;
 import com.mediacare.rest.service.RestAuthService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -20,17 +28,18 @@ public class RestAuthController{
 	private final RestAuthService authService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(
+	public Map<String, String> login(
 			@RequestBody  @Valid LoginRequest loginRequest) {
-
-		return authService.login(loginRequest);
+		String jwt = authService.login(loginRequest);
+		return Collections.singletonMap("authenticationToken", jwt);
 	}
 
 	@PostMapping("/register")
-	public AuthenticationResponse register(
+	public Map<String, String> register(
 			@RequestBody @Valid NewUserDto newUserDto){
-
-		return authService.registerNewPatient(newUserDto);
+		String jwt = authService.registerNewPatient(newUserDto); 
+		
+		return Collections.singletonMap("authenticationToken", jwt); 
 	}
 
 	@GetMapping("/test")
@@ -46,12 +55,5 @@ public class RestAuthController{
 		
  			return authService.logout(request);
 	}
-	
-	@PostMapping("/refreshToken")
-	public ResponseEntity<?> refreshToken(
-			@RequestBody @Valid RefreshTokenRequest reTokenRequest) {
 
-		return authService.createNewRefreshtoken(reTokenRequest);
-		
-	}
 }

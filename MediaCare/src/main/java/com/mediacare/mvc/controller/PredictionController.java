@@ -46,10 +46,6 @@ public class PredictionController {
     public ModelAndView getListOfPrediction() {
     	ModelAndView modelAndView=new ModelAndView();
     	
-//    	List<Prediction> predictions= 
-//    	
-//    	modelAndView.getModelMap().addAttribute("listPrediction", predictions);
-    	
     	modelAndView.setViewName("list-prediction");
     	
     	return modelAndView;

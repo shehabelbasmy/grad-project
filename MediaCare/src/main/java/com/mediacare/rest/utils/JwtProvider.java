@@ -54,7 +54,8 @@ public class JwtProvider {
 				.setClaims(createClaims(email,authority))
 				.signWith(getPrivateKey())
 				.setIssuedAt(Date.from(Instant.now()))
-				.setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationMills)))
+				//Date.from(Instant.now().plusMillis(jwtExpirationMills))
+				.setExpiration(null)
 				.compact();
 	}
 	

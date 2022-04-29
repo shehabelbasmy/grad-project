@@ -20,14 +20,14 @@
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
                     <div ></div>
-                        <form th:object="${predictionTemp}" method="post" th:action="@{/processPrediction}">
+                        <form th:object="${predictionTemp}" method="post" th:action="@{/result}">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-										<label>Resting Bp</label>
+										<label>Chest Pain</label>
 										<select th:field="*{chestPain}" class="form-select" aria-label="Default select example">
 											<option th:each="chestPain : ${T(com.mediacare.mvc.dto.ChestPain).values()}"
-													th:value="${chestPain.value}" th:text="${chestPain.toString()}"></option>
+													th:value="${chestPain}" th:text="${chestPain.toString()}"></option>
 										</select>
 									</div>
                                 </div>
@@ -42,15 +42,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Cholestrol</label>
-                                        <input th:field="*{cholestrol}" class="form-control" type="number"/>
+                                        <input th:field="*{cholesterol}" class="form-control" type="number"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Fasting BG</label>
-                                        <select class="form-select" th:filed="*{fastingBg}">
-                                        	<option th:value="true">Greater Than 120</option>
-                                        	<option th:value="false">Smaller Than 120</option>
+                                        <label>Fasting BS</label>
+                                        <select class="form-select" th:field="*{fastingBS}">
+                                        	<option th:value="1" th:text="'Greater Than 120'"></option>
+                                        	<option th:value="0" th:text="'Smaller Than 120'"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -58,8 +58,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Rest ECG</label>
-                                        <input type="number" th:field="*{restECG}" class="form-control">
+                                        <label>Resting ECG</label>
+                                        <select class="form-select" th:field="*{restingECG}">
+                                        	<option th:value="Normal" th:text="Normal"></option>
+                                        	<option th:value="ST" th:text="ST"></option>
+                                        	<option th:value="LVH" th:text="LVH"></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -73,18 +77,29 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Exercise Agina</label>
-                                        <select th:field="*{exerciseAgina}" class="form-control" aria-label="Default select Example">
-                                        	<option th:value="false">No</option>
-                                        	<option th:value="true">Yes</option>
+                                        <select th:field="*{exerciseAngina}" class="form-control" aria-label="Default select Example">
+                                        	<option th:value="0">No</option>
+                                        	<option th:value="1">Yes</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Old Peak</label>
-                                        <input class="form-control" type="number" th:field="*{oldPeak}">
+                                        <input class="form-control" th:field="*{oldPeak}">
                                     </div>
                                 </div>
+                                <div class="row">
+                                	<div class="col-md-12">
+                                		<div class="form-group">
+											<label>St Slope</label>
+											<select th:field="*{stSlope}" class="form-select" aria-label="Default select example">
+												<option th:each="stSlope : ${T(com.mediacare.mvc.dto.STSlope).values()}"
+													th:value="${stSlope}" th:text="${stSlope.toString()}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
                             </div>
 <!--                             <div class="form-group"> -->
 <!--                                 <label>Message</label> -->

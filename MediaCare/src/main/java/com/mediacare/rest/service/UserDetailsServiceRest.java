@@ -1,16 +1,19 @@
 package com.mediacare.rest.service;
 
-import com.mediacare.entity.Patient;
-import com.mediacare.rest.dao.PatientRepository;
-import com.mediacare.util.SpringUser;
-import lombok.AllArgsConstructor;
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.mediacare.entity.Patient;
+import com.mediacare.rest.dao.PatientRepository;
+import com.mediacare.rest.dao.PatientRepository.UserPorition;
+import com.mediacare.util.SpringUser;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -27,5 +30,10 @@ public class UserDetailsServiceRest implements UserDetailsService {
         Patient user=userOptional
                 .orElseThrow(()-> new UsernameNotFoundException("Username Not Found"));
         return new SpringUser(user);
+    }
+    
+    @Transactional(readOnly = true)
+    public UserPorition getUserByEmail(String username) {
+    	return userRepo.getUserInfo(username);
     }
 }
