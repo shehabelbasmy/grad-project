@@ -17,7 +17,7 @@ public class RestAuthHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException, ServletException {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(HttpStatus.OK.value());
         byte[] message = ex.getMessage().getBytes(StandardCharsets.UTF_8);
         response.getOutputStream().write(message);
     }

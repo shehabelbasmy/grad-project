@@ -18,6 +18,7 @@ public class MlService {
 	
 	
 	public String callMlModel(PredictionDto predictionDto) {
+		
 		String [] patient= {"Not Affected","Affected"};
 		Integer result =mlService.post()
 				.header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_JSON_VALUE)

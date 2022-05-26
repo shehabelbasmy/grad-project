@@ -1,6 +1,7 @@
 package com.mediacare.rest.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -31,15 +32,20 @@ public class RestAuthController{
 	public Map<String, String> login(
 			@RequestBody  @Valid LoginRequest loginRequest) {
 		String jwt = authService.login(loginRequest);
-		return Collections.singletonMap("authenticationToken", jwt);
+		Map<String , String> resposne= new HashMap<>();
+		resposne.put("authenticationToken", jwt);
+		resposne.put("status", "true");
+		return resposne;
 	}
 
 	@PostMapping("/register")
 	public Map<String, String> register(
 			@RequestBody @Valid NewUserDto newUserDto){
 		String jwt = authService.registerNewPatient(newUserDto); 
-		
-		return Collections.singletonMap("authenticationToken", jwt); 
+		Map<String , String> resposne= new HashMap<>();
+		resposne.put("authenticationToken", jwt);
+		resposne.put("status", "true");
+		return resposne; 
 	}
 
 	@GetMapping("/test")

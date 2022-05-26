@@ -32,6 +32,23 @@
 									</div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="form-group">
+										<label>Age</label>
+										<input type="number" th:field="*{age}" class="form-control"/>
+									</div>
+                                </div>
+                                <div class="col-md-6">
+	                                <div class="form-group">
+										<label>Gender</label>
+										<select th:field="*{sex}" class="form-select"
+											aria-label="Default select example">
+											
+											<option th:each="gender : ${T(com.mediacare.enums.Gender).values()}"
+												th:value="${gender.sex}" th:text="${gender.name}"></option>
+										</select>
+									</div>
+								</div>
+                                <div class="col-md-6">
 									<div class="form-group">
 										<label>Resting BP</label>
 										<input type="number" th:field="*{restingBP}" class="form-control"/>

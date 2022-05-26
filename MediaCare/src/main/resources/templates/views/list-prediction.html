@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="../fragments/header :: header">
+</head>
+
+<body>
+	Hello From List Predictions
+	<div class="main-wrapper">
+		<div th:replace="../fragments/navbar :: navbar"></div>
+		<div th:replace="../fragments/sidebar :: sidebar"></div>
+		<div class="page-wrapper">
+			<div class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-border table-striped custom-table datatable mb-0">
+								<thead>
+									<tr>
+										<th>Time</th>
+										<th>Age</th>
+										<th>Chest Pain</th>
+										<th>Cholesterol</th>
+										<th>Exercise Agina</th>
+										<th>Fasting  BS</th>
+										<th>Max Hr</th>
+										<th>Old Peak</th>
+										<th>Resting BP</th>
+										<th>Resting ECG</th>
+										<th>Sex</th>
+										<th>St Slope</th>
+										<th>Result</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="prediction: ${predictionList}">
+									    <td th:text="${prediction.createdTime}" />
+									    <td th:text="${prediction.predictionDto.age}" />
+									    <td th:text="${prediction.predictionDto.chestPain}" />
+									    <td th:text="${prediction.predictionDto.cholesterol}" />
+									    <td th:text="${prediction.predictionDto.exerciseAngina}" />
+									    <td th:text="${prediction.predictionDto.fastingBS}" />
+									    <td th:text="${prediction.predictionDto.maxHR}" />
+									    <td th:text="${prediction.predictionDto.oldPeak}" />
+									    <td th:text="${prediction.predictionDto.restingBP}" />
+									    <td th:text="${prediction.predictionDto.restingECG}" />
+									    <td th:text="${prediction.predictionDto.sex}" />
+									    <td th:text="${prediction.predictionDto.stSlope}" />
+									    <td th:text="${prediction.result}" />
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="../fragments/footer :: page-scripts"></div>
+</body>
+</html>

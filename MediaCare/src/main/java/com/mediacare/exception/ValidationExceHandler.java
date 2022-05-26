@@ -22,6 +22,7 @@ public class ValidationExceHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String,String> errors =new HashMap<>();
+        errors.put("status", "false");
         ex.getBindingResult().getAllErrors().forEach((error)->{
             String fieldName=((FieldError)error).getField();
             String errorMessage=error.getDefaultMessage();
