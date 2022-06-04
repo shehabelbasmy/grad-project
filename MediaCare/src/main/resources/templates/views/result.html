@@ -7,10 +7,23 @@
 	<div class="main-wrapper">
 		<div th:replace="../fragments/navbar :: navbar"></div>
 		<div th:replace="../fragments/sidebar :: sidebar"></div>
+
 		<div class="page-wrapper">
 			<div class="content">
-				<div class="row">
-					<span th:text=${result}></span>
+				<div class="container-fluid" >
+					<div class="row">
+						<div class="card" style="text-align: center;">
+							<h1 class="card-header">Result</h1>
+							<div class="card-body"
+								style="background-color: rgb(189, 213, 201);">
+								<p class="card-text" th:text=${result}></p>
+								<p class="card-text">Reliability : 97%</p>
+								<a th:href="@{/prediction}" class="btn btn-primary">Make
+									Another</a>
+							</div>
+						</div>
+
+					</div>
 				</div>
 			</div>
 		</div>
