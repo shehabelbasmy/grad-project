@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum Gender {
 
 	MALE("MALE",1),FEMALE("FEMALE",0);
+	
 	@Getter
 	private int sex;
 	
@@ -13,5 +14,6 @@ public enum Gender {
 	
 	Gender(String name,int sex){
 		this.name=name;
+		this.sex=sex;
 	}
 }

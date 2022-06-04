@@ -27,6 +27,7 @@ public class PredictionController {
 	private final MlService mlService;
 	private final PatientService patientService;
 	private final PredictionService predictionService;
+	
 	@GetMapping("prediction")
     public ModelAndView makePredction() {
     	ModelAndView modelAndView=new ModelAndView();
@@ -52,16 +53,22 @@ public class PredictionController {
     }
 
 	private String getPrediction(PredictionDto predictionDto) {
+		
 		String result=mlService.callMlModel(predictionDto);
+		
     	Prediction prediction= new Prediction();
+    	
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    	
     	Patient patient = patientService.getLoggedUser(username);
+    	
     	prediction.setResult(result);
     	prediction.setPredictionDto(predictionDto);
     	prediction.setPatient(patient);
     	predictionService.savePrediction(prediction);
 		return result;
 	}
+	
     @GetMapping("prediction-list")
     public ModelAndView getListOfPrediction() {
     	ModelAndView modelAndView=new ModelAndView();
