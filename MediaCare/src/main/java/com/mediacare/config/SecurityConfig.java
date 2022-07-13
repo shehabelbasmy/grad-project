@@ -142,7 +142,7 @@ public class SecurityConfig{
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("/css/**","/js/**","/img/**","/fonts/**");
+			web.ignoring().antMatchers("/css/**","/js/**","/img/**","/webfonts/**");
 		}
 	}
 
