@@ -19,7 +19,7 @@ public class MlService {
 	
 	public String callMlModel(PredictionDto predictionDto) {
 		
-		String [] patient= {"Negative - No Risk of Heart Disease","Positive - Take information with you to the doctor."};
+		String [] patient= {"Negative - No Risk of Heart Disease","Positive - Now Go To Survey"};
 		Integer result =mlService.post()
 				.header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_JSON_VALUE)
 				.body(Mono.just(predictionDto),PredictionDto.class)

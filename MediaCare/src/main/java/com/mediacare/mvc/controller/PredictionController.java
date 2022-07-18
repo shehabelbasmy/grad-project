@@ -77,4 +77,35 @@ public class PredictionController {
     	modelAndView.setViewName("list-prediction");
     	return modelAndView;
     }
+    
+    @GetMapping("survey")
+    public ModelAndView survey() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("stages");
+    	return modelAndView;
+    }
+    
+    @GetMapping("drugs")
+    public ModelAndView drugs() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("drugs");
+    	return modelAndView;
+	}
+    @GetMapping("advices")
+    public ModelAndView advices() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("advices");
+    	return modelAndView;
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

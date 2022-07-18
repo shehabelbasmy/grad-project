@@ -10,14 +10,13 @@
 
 		<div class="page-wrapper">
 			<div class="content">
-				<div class="container-fluid" >
+				<div class="container" >
 					<div class="row">
-						<div class="card" style="text-align: center;">
-							<h1 class="card-header">Result</h1>
-							<div class="card-body"
-								style="background-color: rgb(189, 213, 201);">
+						<div class="card" style="text-align: center; width:100%;">
+							<h1 style="background-color: rgb(196 204 200); ">Result</h1>
+							<div class="card-body">
 								<p class="card-text" th:text=${result}></p>
-								<p class="card-text">Reliability : 97%</p>
+								<p class="card-text">Reliability : 93%</p>
 								<a th:href="@{/prediction}" class="btn btn-primary">Make
 									Another</a>
 							</div>

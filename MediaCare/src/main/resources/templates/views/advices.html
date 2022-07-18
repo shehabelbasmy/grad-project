@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="../fragments/header :: header">
+</head>
+<body>
+
+	<div class="main-wrapper">
+		<div th:replace="../fragments/navbar :: navbar"></div>
+		<div th:replace="../fragments/sidebar :: sidebar"></div>
+
+		<div class="page-wrapper">
+			<div class="content">
+				<div class="card-header" style="text-align: center; background-color: rgb(196 204 200); font-size: 28px" >Health Care Advices</div>
+				<img  th:src="@{/img/heart/456789.webp}"style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/121.webp}"style="width: 23%;height: 30%" alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/12134.webp}"style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/12332.png}"style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/345678io.jpg}"style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/12123.jpg}" style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/fish.webp}" style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+				<img  th:src="@{/img/heart/apple.png}" style="width: 23%;height: 30%"alt="..." class="img-thumbnail">
+			</div>
+		</div>
+	</div>
+	<div th:replace="../fragments/footer :: page-scripts"></div>
+</body>
+</html>
+</body>
+</html>

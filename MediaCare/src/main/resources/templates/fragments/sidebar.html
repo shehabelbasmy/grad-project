@@ -6,12 +6,15 @@
 		<div id="sidebar-menu" class="sidebar-menu">
 			<ul>
 				<li class="menu-title">Main</li>
-				<li><a th:href="@{/prediction}"><i class="fa fa-dashboard"></i> 
+				<li><a th:href="@{/prediction}"><i class="fa-solid fa-stethoscope"></i> 
 					<span>Make Prediction</span></a></li>
 				
-				<li><a th:href="@{/prediction-list}"><i class="fa fa-wheelchair"></i>
+				<li><a th:href="@{/prediction-list}"><i class="fa-solid fa-list"></i>
 					<span>My Prediction</span></a></li>
-				<li><a href="#"><i class="fa-solid fa-hand-holding-medical"></i> <span>Advices</span></a>
+				<li><a th:href="@{/survey}"><i class="fa-solid fa-hand-holding-medical"></i> <span>Survey</span></a>
+				<li><a th:href="@{/advices}"><i class="fas fa-hands-helping"></i> <span>Advices</span></a>
+				
+				<li><a th:href="@{/drugs}"><i class="fa-solid fa-capsules"></i><span>Drugs</span></a>
 
 				<li><a th:href="@{/logout}"><i class="fa-solid fa-arrow-right-from-bracket"></i></i><span>Logout</span></a></li>
 			</ul>

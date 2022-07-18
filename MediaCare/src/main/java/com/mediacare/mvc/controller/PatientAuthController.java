@@ -27,7 +27,7 @@ public class PatientAuthController {
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return "redirect:/profile";
+			return "redirect:/";
 		}
 		theModel.addAttribute("newUser", new NewUserDto());
 		
@@ -42,13 +42,13 @@ public class PatientAuthController {
 		}
 		authService.registerNewAdmin(theNewUser);
 		
-		return "redirect:/profile";
+		return "redirect:/";
 	}
 	@GetMapping("/login")
 	public String login(){
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return "redirect:/profile";
+			return "redirect:/";
 		}
 		return "login2";
 	}
